@@ -1,0 +1,29 @@
+:root{
+  --primary: #1aac83;
+  -error: #e7195a
+}
+body {
+  margin: 0;
+  background: #f1f1f1;
+  font-family: "Poppins"
+}
+header {
+  background: #fff;
+}
+header .navbar {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header a {
+  color: #333;
+  text-decoration: none;
+}
+.pages{
+  max-width: 1440px;
+  padding: 20px;
+  margin: 0 auto;
+}
