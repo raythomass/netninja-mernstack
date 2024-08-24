@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const {
     getWorkouts,
     getOneWorkout,
@@ -8,6 +9,13 @@ const {
 } = require('../controllers/workoutController');
 
 const router = express.Router();
+
+router.use(
+    cors({
+        credentials: true,
+        origin: 'http://localhost:3000'
+    })
+);
 
 router.get('/', getWorkouts);
 
