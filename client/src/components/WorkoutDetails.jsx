@@ -10,8 +10,8 @@ const handleClick = async () => {
   console.log(response)
 
   if (response) {
-    dispatch({type: "DELETE_WORKOUT", payload: response})
-    window.location.reload()
+    dispatch({type: "DELETE_WORKOUT", payload: response.data})
+    // window.location.reload()
   }
 }
 
