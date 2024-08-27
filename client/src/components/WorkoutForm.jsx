@@ -1,7 +1,9 @@
 import { useState } from "react"
 import axios from 'axios'
+import { useWorkoutContext } from "../hooks/useWorkoutContext"
 
 export default function WorkoutForm() {
+    const { dispatch } = useWorkoutContext();
     const [data, setData] = useState({
         title: "",
         load: "",
@@ -19,15 +21,11 @@ export default function WorkoutForm() {
             if(data.error) {
                 console.log(data.error)
             }else {
-                setData([...data, {title, load, reps}])
+                dispatch({type: "CREATE_WORKOUT", payload: data})
             }
          } catch (error) {
             console.log(error)
          }
-    }
-
-    const handleReload = () => {
-        window.location.reload()
     }
 
   return (
@@ -52,7 +50,7 @@ export default function WorkoutForm() {
             onChange={(e) => setData({...data, reps: e.target.value})}
             value={data.reps}
         />
-        <button onClick={handleReload}>Add Workout</button>
+        <button>Add Workout</button>
 
     </form>
   )
