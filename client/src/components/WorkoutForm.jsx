@@ -1,31 +1,57 @@
 import { useState } from "react"
 import axios from 'axios'
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
+import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function WorkoutForm() {
     const { dispatch } = useWorkoutContext();
-    const [data, setData] = useState({
-        title: "",
-        load: "",
-        reps: ""
-    })
+    const { user } = useAuthContext()
+
+    const [title, setTitle] = useState('')
+    const [load, setLoad] = useState('')
+    const [reps, setReps] = useState('')
+    const [error, setError] = useState(null)
+    const [emptyFields, setEmptyFields] = useState([])
+    // const [data, setData] = useState({
+    //     title: "",
+    //     load: "",
+    //     reps: ""
+    // })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const {title, load, reps} = data
-         try {
-            const {data} = await axios.post('/api/workouts', {
-                title, load, reps
-            })
-            if(data.error) {
-                console.log(data.error)
-            }else {
-                dispatch({type: "CREATE_WORKOUT", payload: data})
+        if(!user) {
+            setError('You must be logged in')
+            return
+        }
+
+        const workout = {title, load, reps}
+
+        const response = await fetch('http://localhost:3001/api/workouts', {
+            method: 'POST', 
+            body: JSON.stringify(workout),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
-         } catch (error) {
-            console.log(error)
-         }
+        })
+
+        const json = await response.json()
+
+        if(!response.ok) {
+            setError(json.error)
+            setEmptyFields(json.emptyFields)
+        }
+
+        if(response.ok) {
+            setTitle('')
+            setLoad('')
+            setReps('')
+            setError(null)
+            console.log('New Workout Created', json)
+            dispatch({type: 'CREATE_WORKOUT', payload: json})
+        }
     }
 
   return (
@@ -35,20 +61,20 @@ export default function WorkoutForm() {
         <label>Exercise Title</label>
         <input
             type="text"
-            onChange={(e) => setData({...data, title:e.target.value})}
-            value={data.title}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
         />
         <label>Load: </label>
         <input
             type="text"
-            onChange={(e) => setData({...data, load:e.target.value})}
-            value={data.load}
+            onChange={(e) => setLoad(e.target.value)}
+            value={load}
         />
         <label>Reps: </label>
         <input
             type="text"
-            onChange={(e) => setData({...data, reps: e.target.value})}
-            value={data.reps}
+            onChange={(e) => setReps(e.target.value)}
+            value={reps}
         />
         <button>Add Workout</button>
 
