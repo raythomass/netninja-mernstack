@@ -12,11 +12,6 @@ export default function WorkoutForm() {
     const [reps, setReps] = useState('')
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
-    // const [data, setData] = useState({
-    //     title: "",
-    //     load: "",
-    //     reps: ""
-    // })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -64,7 +59,7 @@ export default function WorkoutForm() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
         />
-        <label>Load: </label>
+        <label>Load (lbs): </label>
         <input
             type="text"
             onChange={(e) => setLoad(e.target.value)}
